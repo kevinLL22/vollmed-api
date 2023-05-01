@@ -19,6 +19,7 @@ public class MedicoEntity {
     private Long id;
     private String nombre;
     private String email;
+    private String telefono;
     private String documento;
     @Enumerated(EnumType.STRING)    //El atributo tipo enum se mapea como string
     private Especialidad especialidad;
@@ -28,6 +29,7 @@ public class MedicoEntity {
     public MedicoEntity(DatosRegistroMedico datosRegistroMedico) {
         this.nombre = datosRegistroMedico.nombre();
         this.email = datosRegistroMedico.email();
+        this.telefono=datosRegistroMedico.telefono();
         this.documento = datosRegistroMedico.documento();
         this.especialidad = datosRegistroMedico.especialidad();
         this.direccion = new Direccion(datosRegistroMedico.direccion());
