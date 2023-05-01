@@ -7,12 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.direccion.Direccion;
 
-@Table(name = "medicos")
-@Entity(name = "medico")
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(of = "id")
+@Table(name = "medicos") //Nombre en la DB
+@Entity(name = "medico") //Nombre opcional para las consultas
+@Getter                  //getters automaticos
+@NoArgsConstructor       //Constructor automatico
+@AllArgsConstructor      //Constructor automatico
+@EqualsAndHashCode(of = "id") //equals y hash comparados por id
 public class MedicoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +20,17 @@ public class MedicoEntity {
     private String nombre;
     private String email;
     private String documento;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)    //El atributo tipo enum se mapea como string
     private Especialidad especialidad;
-    @Embedded
+    @Embedded   //Se embebe a la entidad los atributos de la otra clase
     private Direccion direccion;
+
+    public MedicoEntity(DatosRegistroMedico datosRegistroMedico) {
+        this.nombre = datosRegistroMedico.nombre();
+        this.email = datosRegistroMedico.email();
+        this.documento = datosRegistroMedico.documento();
+        this.especialidad = datosRegistroMedico.especialidad();
+        this.direccion = new Direccion(datosRegistroMedico.direccion());
+
+    }
 }
