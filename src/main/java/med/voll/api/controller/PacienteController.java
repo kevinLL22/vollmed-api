@@ -3,16 +3,16 @@ package med.voll.api.controller;
 import jakarta.validation.Valid;
 import med.voll.api.medico.DatosRegistroMedico;
 import med.voll.api.medico.MedicoEntity;
+import med.voll.api.paciente.DatosListadoPaciente;
 import med.voll.api.paciente.DatosRegistroPaciente;
 import med.voll.api.paciente.PacienteEntity;
 import med.voll.api.paciente.PacienteRepository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/medicos")
+@RequestMapping("/paciente")
 public class PacienteController {
 
     private final PacienteRepository pacienteRepository;
@@ -22,7 +22,12 @@ public class PacienteController {
     }
 
     @PostMapping
-    public void registrarMedicos(@RequestBody @Valid DatosRegistroPaciente datosRegistroPaciente){
+    public void registrarPacientes(@RequestBody @Valid DatosRegistroPaciente datosRegistroPaciente){
         pacienteRepository.save(new PacienteEntity(datosRegistroPaciente));
+    }
+
+    @GetMapping
+    public Page <DatosListadoPaciente> listadoPacientes(Pageable pageable){
+        return pacienteRepository.findAll(pageable).map(DatosListadoPaciente::new);
     }
 }

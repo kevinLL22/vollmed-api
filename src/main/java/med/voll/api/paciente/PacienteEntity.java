@@ -6,8 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.direccion.Direccion;
-import med.voll.api.medico.DatosRegistroMedico;
-import med.voll.api.medico.Especialidad;
+
 
 @Table(name = "pacientes")
 @Entity(name = "paciente")
@@ -23,7 +22,8 @@ public class PacienteEntity {
     private String nombre;
     private String email;
     private String telefono;
-    private String documento;
+    @Column(name ="documento_identidad")
+    private String documentoIdentidad;
     @Embedded   //Se embebe a la entidad los atributos de la otra clase
     private Direccion direccion;
 
@@ -31,7 +31,7 @@ public class PacienteEntity {
         this.nombre = datosRegistroPaciente.nombre();
         this.email = datosRegistroPaciente.email();
         this.telefono=datosRegistroPaciente.telefono();
-        this.documento = datosRegistroPaciente.documento();
+        this.documentoIdentidad = datosRegistroPaciente.documentoIdentidad();
         this.direccion = new Direccion(datosRegistroPaciente.direccion());
 
     }

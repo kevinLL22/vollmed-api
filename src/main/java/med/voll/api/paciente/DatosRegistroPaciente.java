@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import med.voll.api.direccion.DatosDireccion;
-import med.voll.api.medico.Especialidad;
+
 
 public record DatosRegistroPaciente(
         @NotBlank
@@ -19,7 +19,7 @@ public record DatosRegistroPaciente(
         String telefono,
         @NotBlank
         @Pattern(regexp = "\\d{4,6}")
-        String documento,
+        String documentoIdentidad,
         @NotNull // es un objeto, así que usamos notNull
         @Valid
         DatosDireccion direccion
