@@ -35,4 +35,16 @@ public class MedicoEntity {
         this.direccion = new Direccion(datosRegistroMedico.direccion());
 
     }
+    //todo Actualizar con reflexión
+    public void actualizarDatos(DatosActualizarMedico datosActualizarMedico) {
+        if (datosActualizarMedico.nombre() != null){
+            this.nombre = datosActualizarMedico.nombre();
+        }
+        if (datosActualizarMedico.documento() != null){
+            this.documento = datosActualizarMedico.documento();
+        }
+        if (datosActualizarMedico.direccion() != null){
+            this.direccion = direccion.actualizarDatos(datosActualizarMedico.direccion());
+        }
+    }
 }
