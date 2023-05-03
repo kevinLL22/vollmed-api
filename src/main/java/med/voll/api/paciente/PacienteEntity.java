@@ -35,4 +35,19 @@ public class PacienteEntity {
         this.direccion = new Direccion(datosRegistroPaciente.direccion());
 
     }
+
+    public void actualizarPaciente(DatosActualizarPaciente datosActualizarPaciente){
+        if (datosActualizarPaciente.id() != null){
+            this.id = datosActualizarPaciente.id();
+        }
+        if (datosActualizarPaciente.nombre() != null){
+            this.nombre = datosActualizarPaciente.nombre();
+        }
+        if (datosActualizarPaciente.documento() != null){
+            this.documentoIdentidad = datosActualizarPaciente.documento();
+        }
+        if (datosActualizarPaciente.direccion() != null){
+            this.direccion = direccion.actualizarDatos(datosActualizarPaciente.direccion());
+        }
+    }
 }
