@@ -21,12 +21,14 @@ public class MedicoEntity {
     private String email;
     private String telefono;
     private String documento;
+    private boolean activo;
     @Enumerated(EnumType.STRING)    //El atributo tipo enum se mapea como string
     private Especialidad especialidad;
     @Embedded   //Se embebe a la entidad los atributos de la otra clase
     private Direccion direccion;
 
     public MedicoEntity(DatosRegistroMedico datosRegistroMedico) {
+        this.activo = true;
         this.nombre = datosRegistroMedico.nombre();
         this.email = datosRegistroMedico.email();
         this.telefono=datosRegistroMedico.telefono();
@@ -46,5 +48,9 @@ public class MedicoEntity {
         if (datosActualizarMedico.direccion() != null){
             this.direccion = direccion.actualizarDatos(datosActualizarMedico.direccion());
         }
+    }
+
+    public void desactivarMedico() {
+        this.activo = false;
     }
 }
