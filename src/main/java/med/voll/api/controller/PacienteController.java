@@ -48,13 +48,17 @@ public class PacienteController {
 
     @PutMapping
     @Transactional
-    public void actualizarPaciente(@RequestBody@Valid DatosActualizarPaciente datosActualizarPaciente){
+    public ResponseEntity<DatosRespuestaPaciente> actualizarPaciente(@RequestBody@Valid DatosActualizarPaciente datosActualizarPaciente){
 
         Optional<PacienteEntity> optionalPaciente = pacienteRepository.findById(datosActualizarPaciente.id());
-        if (optionalPaciente.isPresent()){
-            PacienteEntity paciente = optionalPaciente.get();
-            paciente.actualizarPaciente(datosActualizarPaciente);
+
+        if (optionalPaciente.isEmpty()){
+            ResponseEntity.notFound().build();
         }
+        PacienteEntity paciente = optionalPaciente.get();
+        paciente.actualizarPaciente(datosActualizarPaciente);
+        DatosRespuestaPaciente respuestaPaciente = new DatosRespuestaPaciente(paciente);
+        return ResponseEntity.ok(respuestaPaciente);
     }
 
     @DeleteMapping("/{id}")
