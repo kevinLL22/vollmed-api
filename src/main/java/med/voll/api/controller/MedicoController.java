@@ -1,7 +1,7 @@
 package med.voll.api.controller;
 
 import jakarta.validation.Valid;
-import med.voll.api.medico.*;
+import med.voll.api.domain.medico.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ public class MedicoController {
 
     @PostMapping
     public ResponseEntity<DatosRespuestaMedico> registrarMedicos(@RequestBody @Valid DatosRegistroMedico datosRegistroMedico,
-                                           UriComponentsBuilder uriComponentsBuilder){
+                                                                 UriComponentsBuilder uriComponentsBuilder){
         MedicoEntity medico = medicoRepository.save(new MedicoEntity(datosRegistroMedico));
         DatosRespuestaMedico datosRespuestaMedico = new DatosRespuestaMedico(medico);
 

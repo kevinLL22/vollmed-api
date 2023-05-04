@@ -1,0 +1,36 @@
+package med.voll.api.infra;
+
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
+
+@RestControllerAdvice
+public class TratadorErrores {
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity tratarError404(){
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity tratarError400(MethodArgumentNotValidException exception){
+
+        List<DatosErrorValidacion> allErrors = exception.getFieldErrors().stream().map(DatosErrorValidacion::new).toList();
+        return ResponseEntity.badRequest().body(allErrors);
+    }
+    /*Cada elemento de la lista ".getFieldErrors()" devuelve un "FieldError" así que ese es el objeto que
+    * mapeamos al DTO*/
+
+    //DTO lista de errores organizada
+    private record DatosErrorValidacion(String campo, String error){
+        public DatosErrorValidacion(FieldError error) {
+            this(error.getField(),error.getDefaultMessage());
+        }
+    }
+}
