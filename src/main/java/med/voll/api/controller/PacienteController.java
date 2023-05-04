@@ -4,9 +4,12 @@ import jakarta.validation.Valid;
 import med.voll.api.paciente.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
 
 @RestController
@@ -20,8 +23,15 @@ public class PacienteController {
     }
 
     @PostMapping
-    public void registrarPacientes(@RequestBody @Valid DatosRegistroPaciente datosRegistroPaciente){
-        pacienteRepository.save(new PacienteEntity(datosRegistroPaciente));
+    public ResponseEntity<DatosRespuestaPaciente> registrarPacientes(@RequestBody @Valid DatosRegistroPaciente datosRegistroPaciente,
+                                                                     UriComponentsBuilder builder){
+
+        PacienteEntity paciente = pacienteRepository.save(new PacienteEntity(datosRegistroPaciente));
+        DatosRespuestaPaciente respuestaPaciente = new DatosRespuestaPaciente(paciente);
+
+        URI url = builder.path("/paciente/{id}").buildAndExpand(paciente.getId()).toUri();
+
+        return ResponseEntity.created(url).body(respuestaPaciente);
     }
 
     @GetMapping

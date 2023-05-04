@@ -34,9 +34,9 @@ public class MedicoController {
     }
 
     @GetMapping                                 //Pageable viene del frondend, pero ya tiene datos por default
-    public Page<DatosListadoMedico> listadoMedicos(Pageable pageable){
+    public ResponseEntity<Page<DatosListadoMedico>> listadoMedicos(Pageable pageable){
         //return medicoRepository.findAll(pageable).map(DatosListadoMedico::new);  //spring devuelve automaticamente un json
-        return medicoRepository.findByActivoTrue(pageable).map(DatosListadoMedico::new);
+        return ResponseEntity.ok(medicoRepository.findByActivoTrue(pageable).map(DatosListadoMedico::new));
     }
 
     //todo modificar método del put con save
@@ -48,7 +48,6 @@ public class MedicoController {
         DatosRespuestaMedico datosRespuestaMedico = new DatosRespuestaMedico(medico);
         return ResponseEntity.ok(datosRespuestaMedico);
     }
-
     /* delete total:
     @DeleteMapping("/{id}")
     @Transactional
@@ -56,12 +55,18 @@ public class MedicoController {
         MedicoEntity medico = medicoRepository.getReferenceById(id);
         medicoRepository.delete(medico);
     } */
-
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Void> eliminar(@PathVariable Long id){
         MedicoEntity medico = medicoRepository.getReferenceById(id);
         medico.desactivarMedico();
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DatosRespuestaMedico> retornaDatosMedicos(@PathVariable Long id){
+        MedicoEntity medico = medicoRepository.getReferenceById(id);
+        var datosRespuestaMedico = new DatosRespuestaMedico(medico);
+        return ResponseEntity.ok(datosRespuestaMedico);
     }
 }
