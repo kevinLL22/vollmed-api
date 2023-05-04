@@ -35,8 +35,15 @@ public class PacienteController {
     }
 
     @GetMapping
-    public Page <DatosListadoPaciente> listadoPacientes(Pageable pageable){
-        return pacienteRepository.findAll(pageable).map(DatosListadoPaciente::new);
+    public ResponseEntity<Page <DatosListadoPaciente>> listadoPacientes(Pageable pageable){
+        return ResponseEntity.ok(pacienteRepository.findAll(pageable).map(DatosListadoPaciente::new) );
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DatosRespuestaPaciente> retornarDatosMedicos(@PathVariable Long id){
+        PacienteEntity paciente = pacienteRepository.getReferenceById(id);
+        DatosRespuestaPaciente datosRespuestaMedico = new DatosRespuestaPaciente(paciente);
+        return ResponseEntity.ok(datosRespuestaMedico);
     }
 
     @PutMapping
