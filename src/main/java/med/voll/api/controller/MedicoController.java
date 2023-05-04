@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 
 
 @RestController
@@ -21,8 +23,14 @@ public class MedicoController {
     }
 
     @PostMapping
-    public void registrarMedicos(@RequestBody @Valid DatosRegistroMedico datosRegistroMedico){
-        medicoRepository.save(new MedicoEntity(datosRegistroMedico));
+    public ResponseEntity<DatosRespuestaMedico> registrarMedicos(@RequestBody @Valid DatosRegistroMedico datosRegistroMedico,
+                                           UriComponentsBuilder uriComponentsBuilder){
+        MedicoEntity medico = medicoRepository.save(new MedicoEntity(datosRegistroMedico));
+        DatosRespuestaMedico datosRespuestaMedico = new DatosRespuestaMedico(medico);
+
+        //creando uri
+        URI url = uriComponentsBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
+        return ResponseEntity.created(url).body(datosRespuestaMedico);
     }
 
     @GetMapping                                 //Pageable viene del frondend, pero ya tiene datos por default
@@ -34,7 +42,7 @@ public class MedicoController {
     //todo modificar método del put con save
     @PutMapping
     @Transactional
-    public ResponseEntity actualizarMedico(@RequestBody @Valid DatosActualizarMedico datosActualizarMedico){
+    public ResponseEntity<DatosRespuestaMedico> actualizarMedico(@RequestBody @Valid DatosActualizarMedico datosActualizarMedico){
         MedicoEntity medico = medicoRepository.getReferenceById(datosActualizarMedico.id());
         medico.actualizarDatos(datosActualizarMedico);
         DatosRespuestaMedico datosRespuestaMedico = new DatosRespuestaMedico(medico);
@@ -51,7 +59,7 @@ public class MedicoController {
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity eliminar(@PathVariable Long id){
+    public ResponseEntity<Void> eliminar(@PathVariable Long id){
         MedicoEntity medico = medicoRepository.getReferenceById(id);
         medico.desactivarMedico();
         return ResponseEntity.noContent().build();
