@@ -34,7 +34,7 @@ public class TokenService {
 
     }
 
-    public String getSubjetc(String token) {
+    public String getSubject(String token) {
 
         if (token == null){
             throw new RuntimeException();
@@ -51,7 +51,7 @@ public class TokenService {
                     verify(token);
 
         } catch (JWTVerificationException exception) {
-            System.out.println(exception.toString());
+            System.out.println(exception.getMessage());
         }
         if (verifier == null) {
             throw new RuntimeException();
